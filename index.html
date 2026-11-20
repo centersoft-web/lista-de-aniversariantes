@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Registro de Aniversários</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#0284c7;--brand-dark:#0c4a6e;--emerald:#059669;--rose:#e11d48;--slate50:#f8fafc;--slate100:#f1f5f9;--slate200:#e2e8f0;--slate300:#cbd5e1;--slate500:#64748b;--slate700:#334155;--slate800:#1e293b;--slate900:#0f172a;box-sizing:border-box;color-scheme:light}
+*{box-sizing:border-box} body{margin:0;background:var(--slate50);color:var(--slate800);font:14px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh} main{max-width:1120px;margin:0 auto;padding:32px 16px 48px}
+main>h1{margin:-32px -16px 0;padding:24px 24px 2px;color:white;background:linear-gradient(90deg,var(--slate900),var(--brand-dark),var(--slate900));font-size:26px;font-weight:800;letter-spacing:-.02em} .sub{margin:0 -16px 28px;padding:4px 24px 22px;color:#cbd5e1;background:linear-gradient(90deg,var(--slate900),var(--brand-dark),var(--slate900));font-size:12px}
+.card{background:white;border:1px solid var(--slate200);border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(15,23,42,.06)} .card.np:first-of-type{border-top:4px solid var(--brand)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center} input,textarea{font:inherit;color:var(--slate800);background:var(--slate50);border:1px solid var(--slate300);border-radius:8px;padding:9px 11px;min-width:0} input:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(2,132,199,.14);background:white} .field{display:flex;flex-direction:column;gap:4px}.field:first-child{flex:2 1 240px}.field:nth-child(2){flex:1 1 150px}.field label{font-size:12px;font-weight:700;color:var(--slate700)}#nome,#data{width:100%}
+button,a.b{font:inherit;cursor:pointer;color:var(--slate700);background:var(--slate100);border:1px solid var(--slate200);border-radius:8px;padding:8px 12px;text-decoration:none;transition:.15s} button:hover,a.b:hover{background:#e0f2fe;border-color:#bae6fd;color:var(--brand-dark)} button.p{background:#0369a1;border-color:#0369a1;color:white;font-weight:700} button.p:hover{background:var(--brand)} button.s,a.b{padding:5px 9px;font-size:12px} button.d{color:var(--rose);background:#fff1f2;border-color:#fecdd3}
+.tw{display:block;width:100%;height:420px;overflow:auto;scrollbar-gutter:stable} table{width:100%;border-collapse:collapse;min-width:760px} th,td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--slate200);vertical-align:middle} th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--slate500);background:var(--slate50);position:sticky;top:0;z-index:1} td.ac{white-space:nowrap;text-align:right} td.ac button{margin-left:4px} tr:hover td{background:#f8fafc} tr.ed td{background:#e0f2fe} tr.ed input{width:100%}.mu{color:var(--slate500)} #msg{min-height:20px;color:var(--emerald);margin:8px 0 0;font-size:13px} #msg.er{color:var(--rose)}
+details summary{cursor:pointer;font-weight:700;color:var(--slate900)} .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}.g label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--slate500);display:block}.g textarea{width:100%;min-height:78px;resize:vertical;margin-top:5px}.pt{display:none}
+@media(max-width:640px){main{padding-top:20px}main>h1{margin-top:-20px;font-size:22px}.card{padding:15px}.row button{flex:1 1 auto}}
+@media print{body{background:#fff;color:#000}.card.np,.noprint,.ac,th.ac{display:none!important}.pt{display:block;margin-bottom:10px}.card{border:0;box-shadow:none;padding:0}main>h1{margin:0;padding:0;background:none;color:#000}table{min-width:0}th,td{border-bottom:1px solid #999;color:#000}}
+</style>
+</head>
+<body>
+<main>
+<h1>Registro de Aniversários</h1>
+<p class="sub noprint">Cadastre pessoas e datas. A lista fica ordenada por dia e mês e é salva neste navegador.</p>
+<p class="pt" id="pt"></p>
+
+<div class="card np">
+ <div class="row">
+  <div class="field"><label for="nome">Nome</label><input id="nome" placeholder="Nome do aniversariante" autocomplete="off"></div>
+  <div class="field"><label for="data">Data de nascimento</label><input id="data" placeholder="dd/mm/aaaa" inputmode="numeric" maxlength="10" autocomplete="off"></div>
+  <button class="p" id="add">Adicionar</button>
+ </div>
+ <div class="row" style="margin-top:10px">
+  <button id="imp">Importar lista</button>
+  <button id="exp">Exportar lista</button>
+  <button id="prt">Imprimir lista</button>
+  <input type="file" id="file" accept=".json,application/json" hidden>
+ </div>
+ <p id="msg" role="status"></p>
+</div>
+
+<div class="card">
+ <div class="tw"><table>
+  <thead><tr><th>#</th><th>Nome</th><th>Nascimento</th><th>Idade</th><th>Faixa</th><th>Texto</th><th class="ac"></th></tr></thead>
+  <tbody id="tb"></tbody>
+ </table></div>
+ <p class="mu" id="cnt" style="margin:10px 0 0;font-size:13px"></p>
+</div>
+
+<details class="card np">
+ <summary>Textos por faixa etária (editáveis)</summary>
+ <div class="g" id="tx"></div>
+ <p class="mu" style="font-size:13px;margin:10px 0 0">Jovem: até 29 anos · Meia idade: 30–49 · Maduro: 50–64 · Idoso: 65 ou mais.</p>
+</details>
+</main>
+
+<script>
+const $=s=>document.querySelector(s);
+const FX=[['jovem','Jovem',29],['meia','Meia idade',49],['maduro','Maduro',64],['idoso','Idoso',999]];
+const DEF={jovem:'Parabéns 🎁! Que este novo ano venha cheio de energia, novas conquistas e muita coragem para realizar todos os seus sonhos!',meia:'Parabéns 🎁! Que a experiência já vivida e os planos que ainda virão tragam equilíbrio, saúde e muitas alegrias neste novo ano!',maduro:'Parabéns 🎁! Que a sabedoria conquistada ao longo dos anos continue iluminando seus caminhos, com saúde, paz e momentos especiais ao lado de quem você ama!',idoso:'Parabéns 🎁! Que cada ano vivido seja celebrado com carinho, saúde e serenidade, ao lado de quem tanto te admira e ama. Você é uma inspiração!'};
+const BASE={...DEF};const EM=' '+String.fromCodePoint(0x1F38A,0x1F389,0x1F382);for(const k in DEF)DEF[k]+=EM;
+const OLD={jovem:'Texto jovem',meia:'Texto meia idade',maduro:'Texto maduro',idoso:'Texto idoso'};
+let S={rows:[],textos:{...DEF}},editId=null;
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function load(){try{const j=JSON.parse(localStorage.getItem('aniv')||'null');if(j){S.rows=j.rows||[];Object.assign(S.textos,j.textos||{});for(const k in OLD){let v=S.textos[k]||'';if(v===OLD[k]||(v.startsWith(BASE[k])&&/^[\s?\uFFFD]*$/.test(v.slice(BASE[k].length))))v=DEF[k];if(/^Parabéns!/i.test(v))v=v.replace(/^Parabéns!/i,'Parabéns 🎁!');if(/^Parabéns (?!🎁)/i.test(v))v=v.replace(/^Parabéns /i,'Parabéns 🎁 ');S.textos[k]=v}}}catch(e){}}
+function save(){try{localStorage.setItem('aniv',JSON.stringify(S))}catch(e){}}
+function msg(t,er){const m=$('#msg');m.textContent=t;m.className=er?'er':''}
+function mask(v){const d=v.replace(/\D/g,'').slice(0,8);return d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
+function parse(s){const m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s||'');if(!m)return null;const d=+m[1],mo=+m[2],y=+m[3],dt=new Date(y,mo-1,d);
+ if(y<1900||dt.getFullYear()!==y||dt.getMonth()!==mo-1||dt.getDate()!==d||dt>new Date())return null;return{d,mo,y}}
+function age(p){const t=new Date();let a=t.getFullYear()-p.y;const m=t.getMonth()+1;if(m<p.mo||(m===p.mo&&t.getDate()<p.d))a--;return a}
+function sortRows(){
+ const t=new Date(),tm=t.getMonth()+1,td=t.getDate();
+ const key=p=>{if(!p)return 9999;const passed=p.mo<tm||(p.mo===tm&&p.d<td);return (passed?10000:0)+p.mo*100+p.d};
+ S.rows.sort((a,b)=>{const x=parse(a.data),y=parse(b.data),kx=key(x),ky=key(y);return kx-ky||a.nome.localeCompare(b.nome,'pt-BR',{sensitivity:'base'})});
+}
+function lnk(r,t){const h=new Date().getHours(),s=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';const texto=t;const m=encodeURIComponent(r.nome+'\n'+s+' 😃\n'+texto);return `<a class="b" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text=${m}">WhatsApp</a><a class="b" target="_blank" rel="noopener" href="https://t.me/share/url?url=%20&text=${m}">Telegram</a>`}
+function render(){
+ $('#tb').innerHTML=S.rows.map((r,i)=>{
+  if(r.id===editId)return `<tr class="ed"><td>${i+1}</td><td><input id="en" value="${esc(r.nome)}" placeholder="Nome"></td><td><input id="ed" value="${esc(r.data)}" placeholder="dd/mm/aaaa" inputmode="numeric" maxlength="10"></td><td colspan="3" class="mu">Enter salva · Esc cancela</td><td class="ac"><button class="s p" data-a="ok" data-id="${r.id}">Salvar</button><button class="s" data-a="cx" data-id="${r.id}">Cancelar</button></td></tr>`;
+  const p=parse(r.data);let a='',f='',t='';
+  if(p){const n=age(p),x=FX.find(z=>n<=z[2]);a=n;f=x[1];t=S.textos[x[0]]}
+  return `<tr><td>${i+1}</td><td>${esc(r.nome)}</td><td>${esc(r.data)}</td><td>${a}</td><td>${f}</td><td>${esc(t)}</td><td class="ac">${t?lnk(r,t):''}<button class="s" data-a="ed" data-id="${r.id}">Editar</button><button class="s d" data-a="dl" data-id="${r.id}">Excluir</button></td></tr>`
+ }).join('')||'<tr><td colspan="7" class="mu">Nenhum aniversariante cadastrado.</td></tr>';
+ $('#cnt').textContent=S.rows.length+' registro(s)';
+ const e=$('#en');if(e&&!e.dataset.f){e.focus();e.dataset.f=1}
+}
+function commit(id){
+ const r=S.rows.find(x=>x.id===id);if(!r)return;
+ const n=$('#en').value.trim(),d=$('#ed').value.trim();
+ if(!n){msg('Informe o nome.',1);return}
+ if(d&&!parse(d)){msg('Data inválida. Use dd/mm/aaaa (não pode ser futura).',1);return}
+ r.nome=n;r.data=d;editId=null;sortRows();save();render();msg('Linha salva.')}
+function cancel(id){const r=S.rows.find(x=>x.id===id);if(r&&!r.nome&&!r.data)S.rows=S.rows.filter(x=>x!==r);editId=null;save();render();msg('')}
+$('#tb').addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;const id=b.dataset.id,a=b.dataset.a,i=S.rows.findIndex(x=>x.id===id);
+ if(a==='ed'){editId=id;render()}
+ else if(a==='ok')commit(id)
+ else if(a==='cx')cancel(id)
+ else if(a==='dl'){const r=S.rows[i];if(r&&window.confirm('Deseja realmente excluir '+r.nome+'?')){S.rows.splice(i,1);save();render();msg('Linha excluída.')}}
+});
+$('#tb').addEventListener('keydown',e=>{if(!editId||!e.target.closest('tr.ed'))return;if(e.key==='Enter')commit(editId);if(e.key==='Escape')cancel(editId)});
+document.addEventListener('input',e=>{if(e.target.id==='data'||e.target.id==='ed')e.target.value=mask(e.target.value)});
+function adicionar(){
+ const n=$('#nome').value.trim(),d=$('#data').value.trim();
+ if(!n){msg('Informe o nome.',1);return}
+ if(!parse(d)){msg('Data inválida. Use dd/mm/aaaa (não pode ser futura).',1);return}
+ S.rows.push({id:uid(),nome:n,data:d});sortRows();save();render();
+ $('#nome').value='';$('#data').value='';$('#nome').focus();msg('Aniversariante adicionado.')}
+$('#add').onclick=adicionar;
+['nome','data'].forEach(k=>$('#'+k).addEventListener('keydown',e=>{if(e.key==='Enter')adicionar()}));
+
+async function exportar(){
+ const d=new Date(),p=n=>String(n).padStart(2,'0');
+ const fn=`Aniversarios_${p(d.getDate())}-${p(d.getMonth()+1)}-${d.getFullYear()}_${p(d.getHours())}h${p(d.getMinutes())}.json`;
+ const data=JSON.stringify({versao:1,exportadoEm:d.toISOString(),textos:S.textos,pessoas:S.rows.map(r=>({nome:r.nome,data:r.data}))},null,2);
+ try{
+  const dl=window.claude&&await window.claude.use('downloads');
+  if(dl)await dl.save({filename:fn,data});
+  else{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download=fn;document.body.appendChild(a);a.click();a.remove()}
+  msg('Lista exportada: '+fn)
+ }catch(e){msg(e&&e.code==='declined'?'Exportação cancelada.':'Não foi possível exportar.',1)}}
+$('#exp').onclick=exportar;
+$('#imp').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{
+ const f=e.target.files[0];if(!f)return;const rd=new FileReader();
+ rd.onload=()=>{try{
+  const j=JSON.parse(rd.result),l=Array.isArray(j)?j:j.pessoas;if(!Array.isArray(l))throw 0;
+  let n=0;
+  l.forEach(x=>{const nome=String(x.nome||'').trim(),data=parse(x.data)?x.data:'';
+   if(nome&&!S.rows.some(r=>r.nome===nome&&r.data===data)){S.rows.push({id:uid(),nome,data});n++}});
+  if(j.textos&&typeof j.textos==='object')FX.forEach(z=>{if(typeof j.textos[z[0]]==='string')S.textos[z[0]]=j.textos[z[0]]});
+  sortRows();save();render();drawTx();msg(n+' registro(s) importado(s); duplicados foram ignorados.')
+ }catch(x){msg('Arquivo inválido. Use um .json exportado por este registro.',1)}};
+ rd.readAsText(f);e.target.value=''};
+$('#prt').onclick=()=>{
+ $('#pt').textContent='Aniversários — impresso em '+new Date().toLocaleDateString('pt-BR');
+ try{window.print()}catch(e){msg('Impressão indisponível aqui. Abra a página em uma aba própria.',1)}};
+
+function drawTx(){$('#tx').innerHTML=FX.map(z=>`<div><label>${z[1]}</label><textarea data-k="${z[0]}">${esc(S.textos[z[0]])}</textarea></div>`).join('')}
+$('#tx').addEventListener('input',e=>{const k=e.target.dataset.k;if(k){S.textos[k]=e.target.value;save();render()}});
+
+load();sortRows();drawTx();render();
+</script>
+</body>
+</html>
