@@ -115,7 +115,7 @@ $('#add').onclick=adicionar;
 
 async function exportar(){
  const d=new Date(),p=n=>String(n).padStart(2,'0');
- const fn=`Aniversarios_${p(d.getDate())}-${p(d.getMonth()+1)}-${d.getFullYear()}_${p(d.getHours())}h${p(d.getMinutes())}.json`;
+ const fn=`Lista_de_Aniversariantes_${d.getFullYear()}_${p(d.getDate())}-${p(d.getMonth()+1)}-${d.getFullYear()}_${p(d.getHours())}h${p(d.getMinutes())}.json`;
  const data=JSON.stringify({versao:1,exportadoEm:d.toISOString(),textos:S.textos,pessoas:S.rows.map(r=>({nome:r.nome,data:r.data}))},null,2);
  try{
   const dl=window.claude&&await window.claude.use('downloads');
